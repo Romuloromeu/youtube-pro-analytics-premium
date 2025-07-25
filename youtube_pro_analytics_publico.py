@@ -121,7 +121,7 @@ st.markdown("""
             <div>🔒 Suporte dedicado + acesso exclusivo</div>
         </div>
         <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 16px;">
-            <a href="https://youtube-pro-analytics-premium.streamlit.app" target="_blank" style="text-decoration: none;">
+            <a href="https://youtube-pro-analytics-premium-oxulwvn6ava4pbj94hzuqe.streamlit.app" target="_blank" style="text-decoration: none;">
                 <div style="background: linear-gradient(90deg, #00ffe7, #00ccbb); padding: 12px 20px; border-radius: 8px; color: #001219; font-weight: bold; font-size: 15px; box-shadow: 0 0 10px #00ffe7;">
                     🚀 Acessar Premium
                 </div>
