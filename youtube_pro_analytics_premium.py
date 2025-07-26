@@ -5,18 +5,17 @@ from datetime import datetime, timedelta
 from io import BytesIO
 import plotly.express as px
 import plotly.graph_objects as go
-import matplotlib.pyplot as plt
 import re
 import urllib.parse
 import gspread
 from google.oauth2.service_account import Credentials
 import socket
 
+# Configurações da página
 st.set_page_config(page_title="YouTube Pro Analytics Premium", layout="wide", page_icon="🔓")
-st.title("🔓 YouTube Pro Analytics – Premium")
 
 # ------------------ CONTROLE DE LINK DE INDICAÇÃO ------------------
-param_ref = st.query_params.get("ref", [None])[0]
+param_ref = st.experimental_get_query_params().get("ref", [None])[0]
 if param_ref:
     st.session_state['ref_user'] = param_ref
     st.session_state['bonus_ativo'] = True
@@ -33,16 +32,10 @@ if st.session_state.get('bonus_ativo'):
         st.session_state['bonus_ativo'] = False
         bonus_valido = False
 
-# ------------------ VALIDAÇÃO DE CHAVE VIA PLANILHA ------------------
+# ------------------ FUNÇÕES ------------------
 
-# Função para obter nome do dispositivo (hostname)
 def get_device_id():
     return socket.gethostname()
-
-# Função para conectar na planilha Google Sheets
-import streamlit as st
-from google.oauth2.service_account import Credentials
-import gspread
 
 def conectar_planilha():
     escopo = [
@@ -69,20 +62,8 @@ def conectar_planilha():
     cliente = gspread.authorize(credenciais)
     planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
     
-    registros = planilha.get_all_records()
-    st.write(registros)  # Exibe os registros da planilha no app Streamlit
-
     return planilha
 
-
-    caminho_credenciais = os.path.join(os.path.dirname(__file__), 'secrets', 'credenciais.json')
-    credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
-    cliente = gspread.authorize(credenciais)
-    planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
-    return planilha
-
-
-# Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
     registros = planilha.get_all_records()
     device_id = get_device_id()
@@ -98,7 +79,6 @@ def validar_chave(email_input, chave_input, planilha):
                 return False, "❌ Sua chave está inativa ou bloqueada."
 
             if dispositivo == "":
-                # Se não há ID de dispositivo registrado, vincula este
                 planilha.update_cell(i + 2, 6, device_id)
                 return True, "✅ Chave validada e dispositivo vinculado com sucesso."
 
@@ -110,7 +90,13 @@ def validar_chave(email_input, chave_input, planilha):
 
     return False, "❌ Chave ou e-mail inválido."
 
-# Entrada para email e chave
+# ------------------ INTERFACE DE LOGIN ------------------
+
+st.title("🔓 YouTube Pro Analytics – Premium")
+st.markdown("---")
+
+st.header("🔐 Validação de Acesso Premium")
+
 email_usuario = st.text_input("Digite seu e-mail:")
 chave_digitada = st.text_input("Digite sua chave de ativação:", type="password")
 
@@ -121,15 +107,24 @@ if chave_digitada and email_usuario:
     try:
         planilha = conectar_planilha()
         chave_valida, msg_chave = validar_chave(email_usuario.strip(), chave_digitada.strip(), planilha)
+        if chave_valida:
+            st.success(msg_chave)
+        else:
+            st.error(msg_chave)
     except Exception as e:
         st.error(f"❌ Erro ao validar chave: {e}")
         st.stop()
 else:
-    # Se não digitou, considera bônus ou gratuito só para avançar na UI (sem liberar premium)
-    chave_valida = False
+    st.info("🔑 Preencha o e-mail e a chave de ativação para continuar.")
+    st.stop()
 
-# ------------------ CONTROLE DE ACESSO ------------------
+# Se não validou a chave, mas tem bônus, libera pelo convite
+if not chave_valida and bonus_valido:
+    chave_valida = True
+    msg_chave = "🎁 Acesso liberado por convite – expira em até 3 dias"
+    st.success(msg_chave)
 
+# Se chave inválida e sem bônus, bloqueia acesso e mostra opções
 if not chave_valida:
     st.markdown("<hr style='margin-top: 15px; margin-bottom: 10px;'>", unsafe_allow_html=True)
     st.markdown("## 🔑 Ainda não tem sua chave de ativação?")
@@ -158,38 +153,15 @@ if not chave_valida:
     """, unsafe_allow_html=True)
 
     st.warning("🔐 Acesso restrito. Insira a chave correta para acessar o conteúdo Premium.")
+    st.stop()
 
-st.markdown("""
-<div style="margin-top: 20px; display: flex; justify-content: flex-start;">
-    <a href="https://youtube-pro-analytics-premium-oxulwvn6ava4pbj94hzuqe.streamlit.app" target="_blank" style="text-decoration: none;">
-        <div style="background: linear-gradient(90deg, #00ffe7, #00ccbb); 
-                    padding: 12px 20px; 
-                    border-radius: 8px; 
-                    color: #001219; 
-                    font-weight: bold; 
-                    font-size: 15px; 
-                    box-shadow: 0 0 10px #00ffe7;
-                    max-width: 280px;
-                    text-align: center;">
-            👀 Usar Versão Pública (Limitada)
-        </div>
-    </a>
-</div>
-""", unsafe_allow_html=True)
+# ------------------ SE CHEGOU AQUI, ACESSO LIBERADO ------------------
 
-st.stop()
-
+st.markdown("---")
 st.success(msg_chave)
 
-if chave_valida:
-    st.success(msg_chave)
-elif bonus_valido:
-    st.success("🎁 Acesso liberado por convite – expira em até 3 dias")
-else:
-    st.success("✅ Acesso Gratuito liberado")
-
 # ----------------------------------------------------
-# Aqui continua todo o seu código original para YouTube Analytics
+# A partir daqui seu código original do YouTube Analytics começa
 # ----------------------------------------------------
 
 API_KEY = 'AIzaSyANI2GxhU0bMyHhns1BbEmiVMVWGLKZgZA'
@@ -297,80 +269,24 @@ if df.empty:
     st.stop()
 
 nome_canal = buscar_nome_canal(chan_id)
-st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
+st.header(f"📊 Análise do canal: {nome_canal}")
+st.write(f"Número de vídeos analisados: {len(df)}")
 
-# Filtro por data personalizada
-st.markdown("### 📆 Filtro por Período")
-data_inicio = st.date_input("De:", df['DataHora'].min().date())
-data_fim = st.date_input("Até:", df['DataHora'].max().date())
+st.markdown("---")
 
-df_filtrado = df[(df['DataHora'].dt.date >= data_inicio) & (df['DataHora'].dt.date <= data_fim)]
+# Visualização gráfica
+fig_views = px.bar(df.sort_values('DataHora', ascending=True), x='DataHora', y='Visualizações', labels={'DataHora':'Data', 'Visualizações':'Visualizações'}, title='Visualizações por vídeo (mais recentes)')
+st.plotly_chart(fig_views, use_container_width=True)
 
-# VISÃO GERAL
-df_mes = df_filtrado[df_filtrado['DataHora'].dt.month == datetime.now().month]
-df_ano = df_filtrado[df_filtrado['DataHora'].dt.year == datetime.now().year]
-top5_mes = df_mes.nlargest(5, 'Visualizações')
-top5_ano = df_ano.nlargest(5, 'Visualizações')
-df20 = df_filtrado.nlargest(20, 'DataHora')
+st.markdown("---")
+st.subheader("📋 Dados detalhados dos vídeos")
+st.dataframe(df[['Título','Data','Hora','Visualizações','Likes','Dislikes']].sort_values('DataHora', ascending=False))
 
-st.markdown("## 📊 Visão Geral")
-col1, col2, col3 = st.columns(3)
-col1.metric("🎮 Total de vídeos", len(df_filtrado))
-col2.metric("📈 Média de views", int(df_filtrado['Visualizações'].mean()))
-col3.metric("🗓 Vídeos este mês", len(df_mes))
-
-# GRÁFICO PIZZA
-st.subheader("🥧 Top 5 Vídeos do Ano")
-fig1 = go.Figure(data=[go.Pie(
-    labels=top5_ano['Título'],
-    values=top5_ano['Visualizações'],
-    hole=0.3,
-    pull=[0.05]*len(top5_ano),
-    hoverinfo='label+percent+value',
-    textinfo='percent+label',
-    marker=dict(line=dict(color='gray', width=1))
-)])
-st.plotly_chart(fig1, use_container_width=True)
-
-# GRÁFICO BARRAS MELHORADO
-st.subheader("📊 Top 5 Vídeos do Mês")
-fig_bar = px.bar(
-    top5_mes,
-    x='Visualizações',
-    y='Título',
-    orientation='h',
-    color='Visualizações',
-    color_continuous_scale='Teal',
-    title='Top 5 Vídeos do Mês',
-    labels={'Título': 'Título do Vídeo', 'Visualizações': 'Views'}
+# Download Excel
+excel_data = gerar_excel(df)
+st.download_button(
+    label="📥 Baixar dados em Excel",
+    data=excel_data,
+    file_name=f"{nome_canal}_youtube_analytics.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
-fig_bar.update_layout(yaxis=dict(autorange="reversed"))
-st.plotly_chart(fig_bar, use_container_width=True)
-
-# TABELA DE VÍDEOS RECENTES
-st.subheader("🌟 20 Vídeos Mais Recentes")
-st.dataframe(df20[['Título','Data','Hora','Dia da Semana','Visualizações','Likes','Dislikes']])
-
-# BUSCA POR VÍDEO ESPECÍFICO
-st.markdown("## 🔍 Buscar Vídeo Específico")
-video_busca = st.text_input("Digite parte do título do vídeo que deseja buscar:")
-if video_busca:
-    resultados = df[df['Título'].str.contains(video_busca, case=False, na=False)]
-    if not resultados.empty:
-        st.success(f"{len(resultados)} vídeo(s) encontrado(s):")
-        for idx, row in resultados.iterrows():
-            with st.expander(f"📹 {row['Título']}"):
-                st.write(f"**Título:** {row['Título']}")
-                st.write(f"**Data:** {row['Data']}")
-                st.write(f"**Hora:** {row['Hora']}")
-                st.write(f"**Dia da Semana:** {row['Dia da Semana']}")
-                st.write(f"**Visualizações:** {row['Visualizações']:,}")
-                st.write(f"**Likes:** {row['Likes']:,}")
-                st.write(f"**Dislikes:** {row['Dislikes']:,}")
-                video_url = f"https://www.youtube.com/watch?v={row['video_id']}"
-                st.markdown(f"[🔗 Assistir no YouTube]({video_url})")
-    else:
-        st.warning("🔍 Nenhum vídeo encontrado com esse título.")
-
-# DOWNLOAD EXCEL
-st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
