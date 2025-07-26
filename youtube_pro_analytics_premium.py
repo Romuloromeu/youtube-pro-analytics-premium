@@ -1,3 +1,4 @@
+import os
 import json
 import streamlit as st
 from googleapiclient.discovery import build
@@ -51,23 +52,33 @@ def conectar_planilha():
     ]
 
     caminho_local = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
-    
-    # Tenta usar credenciais locais
+    credenciais = None
+
     if os.path.exists(caminho_local):
-        credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
+        try:
+            credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
+        except Exception as e:
+            st.error(f"❌ Erro ao carregar credenciais locais: {e}")
+            st.stop()
     else:
-        # Upload do arquivo via Streamlit
         st.warning("⚠️ Arquivo de credenciais não encontrado localmente. Envie o arquivo manualmente.")
         arquivo_upload = st.file_uploader("📄 Envie o arquivo de credenciais (.json)", type=["json"])
         if not arquivo_upload:
             st.stop()
-        credenciais = Credentials.from_service_account_info(
-            json.load(arquivo_upload), scopes=escopo
-        )
+        try:
+            credenciais = Credentials.from_service_account_info(json.load(arquivo_upload), scopes=escopo)
+        except Exception as e:
+            st.error(f"❌ Erro ao carregar credenciais enviadas: {e}")
+            st.stop()
 
-    cliente = gspread.authorize(credenciais)
-    planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
-    return planilha
+    try:
+        cliente = gspread.authorize(credenciais)
+        planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
+        return planilha
+    except Exception as e:
+        st.error(f"❌ Erro ao conectar com a planilha: {e}")
+        st.stop()
+
 
 # Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
