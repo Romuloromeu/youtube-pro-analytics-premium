@@ -1,21 +1,22 @@
 import streamlit as st
+from google.oauth2.service_account import Credentials
+import gspread
+import socket
+from datetime import datetime, timedelta
+import urllib.parse
 from googleapiclient.discovery import build
 import pandas as pd
-from datetime import datetime, timedelta
 from io import BytesIO
 import plotly.express as px
 import plotly.graph_objects as go
 import re
-import urllib.parse
-import gspread
-from google.oauth2.service_account import Credentials
-import socket
 
-# Configurações da página
+# Configurações iniciais
 st.set_page_config(page_title="YouTube Pro Analytics Premium", layout="wide", page_icon="🔓")
+st.title("🔓 YouTube Pro Analytics – Premium")
 
 # ------------------ CONTROLE DE LINK DE INDICAÇÃO ------------------
-param_ref = st.experimental_get_query_params().get("ref", [None])[0]
+param_ref = st.query_params.get("ref", [None])[0]
 if param_ref:
     st.session_state['ref_user'] = param_ref
     st.session_state['bonus_ativo'] = True
@@ -92,10 +93,7 @@ def validar_chave(email_input, chave_input, planilha):
 
 # ------------------ INTERFACE DE LOGIN ------------------
 
-st.title("🔓 YouTube Pro Analytics – Premium")
-st.markdown("---")
-
-st.header("🔐 Validação de Acesso Premium")
+st.title("🔐 Validação de Acesso Premium")
 
 email_usuario = st.text_input("Digite seu e-mail:")
 chave_digitada = st.text_input("Digite sua chave de ativação:", type="password")
@@ -116,15 +114,9 @@ if chave_digitada and email_usuario:
         st.stop()
 else:
     st.info("🔑 Preencha o e-mail e a chave de ativação para continuar.")
-    st.stop()
 
-# Se não validou a chave, mas tem bônus, libera pelo convite
-if not chave_valida and bonus_valido:
-    chave_valida = True
-    msg_chave = "🎁 Acesso liberado por convite – expira em até 3 dias"
-    st.success(msg_chave)
+# ------------------ BOTÕES PARA COMPRA E SUPORTE ------------------
 
-# Se chave inválida e sem bônus, bloqueia acesso e mostra opções
 if not chave_valida:
     st.markdown("<hr style='margin-top: 15px; margin-bottom: 10px;'>", unsafe_allow_html=True)
     st.markdown("## 🔑 Ainda não tem sua chave de ativação?")
@@ -153,16 +145,37 @@ if not chave_valida:
     """, unsafe_allow_html=True)
 
     st.warning("🔐 Acesso restrito. Insira a chave correta para acessar o conteúdo Premium.")
-    st.stop()
 
-# ------------------ SE CHEGOU AQUI, ACESSO LIBERADO ------------------
+    st.markdown("""
+    <div style="margin-top: 20px; display: flex; justify-content: flex-start;">
+        <a href="https://youtube-pro-analytics-premium-oxulwvn6ava4pbj94hzuqe.streamlit.app" target="_blank" style="text-decoration: none;">
+            <div style="background: linear-gradient(90deg, #00ffe7, #00ccbb); 
+                        padding: 12px 20px; 
+                        border-radius: 8px; 
+                        color: #001219; 
+                        font-weight: bold; 
+                        font-size: 15px; 
+                        box-shadow: 0 0 10px #00ffe7;
+                        max-width: 280px;
+                        text-align: center;">
+                👀 Usar Versão Pública (Limitada)
+            </div>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.markdown("---")
-st.success(msg_chave)
+    st.stop()  # Não libera o conteúdo abaixo se não for válido
 
-# ----------------------------------------------------
-# A partir daqui seu código original do YouTube Analytics começa
-# ----------------------------------------------------
+# ------------------ LIBERA CONTEÚDO PREMIUM ------------------
+
+if chave_valida:
+    st.success(msg_chave)
+elif bonus_valido:
+    st.success("🎁 Acesso liberado por convite – expira em até 3 dias")
+else:
+    st.success("✅ Acesso Gratuito liberado")
+
+# ------------------ INÍCIO DO SEU CÓDIGO DE ANALYTICS ------------------
 
 API_KEY = 'AIzaSyANI2GxhU0bMyHhns1BbEmiVMVWGLKZgZA'
 MAX_VIDEOS = 50
@@ -248,45 +261,39 @@ def gerar_excel(df):
     out = BytesIO()
     with pd.ExcelWriter(out, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name="Vídeos")
-    out.seek(0)
     return out.getvalue()
 
-entrada = st.text_input("🔍 Digite o nome do canal ou cole o link:")
-if not entrada:
-    st.info("⭐ O YouTube Pro Analytics ajuda você a descobrir quais conteúdos realmente valem monetizar.")
-    st.stop()
+# Entrada para o usuário colocar link ou nome do canal
+with st.form(key='form'):
+    entrada_canal = st.text_input("Digite o link ou nome do canal do YouTube:", key="canal_input")
+    submit = st.form_submit_button("Buscar Vídeos")
 
-with st.spinner("🔄 Conectando ao YouTube..."):
-    chan_id = buscar_channel_id(entrada)
+if submit and entrada_canal.strip():
+    channel_id = buscar_channel_id(entrada_canal)
+    if not channel_id:
+        st.error("❌ Canal não encontrado, verifique o link ou nome.")
+    else:
+        nome_canal = buscar_nome_canal(channel_id)
+        st.success(f"Canal encontrado: {nome_canal}")
 
-if not chan_id:
-    st.error("❌ Canal não encontrado. Verifique o nome ou link.")
-    st.stop()
+        with st.spinner("Buscando vídeos e estatísticas..."):
+            df_videos = coletar_videos(channel_id, MAX_VIDEOS)
+            st.write(f"Total de vídeos coletados: {len(df_videos)}")
 
-df = coletar_videos(chan_id)
-if df.empty:
-    st.warning("⚠ Não foi possível carregar os vídeos desse canal.")
-    st.stop()
+            # Mostrar tabela
+            st.dataframe(df_videos)
 
-nome_canal = buscar_nome_canal(chan_id)
-st.header(f"📊 Análise do canal: {nome_canal}")
-st.write(f"Número de vídeos analisados: {len(df)}")
+            # Gráfico de visualizações por data
+            fig = px.bar(df_videos, x='Data', y='Visualizações', title='Visualizações por Data')
+            st.plotly_chart(fig, use_container_width=True)
 
-st.markdown("---")
+            # Botão para baixar Excel
+            dados_excel = gerar_excel(df_videos)
+            st.download_button("📥 Baixar dados em Excel", dados_excel, file_name=f"{nome_canal}_videos.xlsx")
 
-# Visualização gráfica
-fig_views = px.bar(df.sort_values('DataHora', ascending=True), x='DataHora', y='Visualizações', labels={'DataHora':'Data', 'Visualizações':'Visualizações'}, title='Visualizações por vídeo (mais recentes)')
-st.plotly_chart(fig_views, use_container_width=True)
+# ------------------ RODAPÉ ------------------
 
-st.markdown("---")
-st.subheader("📋 Dados detalhados dos vídeos")
-st.dataframe(df[['Título','Data','Hora','Visualizações','Likes','Dislikes']].sort_values('DataHora', ascending=False))
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("Desenvolvido por Rômulo | Canal YouTube Pro Analytics")
 
-# Download Excel
-excel_data = gerar_excel(df)
-st.download_button(
-    label="📥 Baixar dados em Excel",
-    data=excel_data,
-    file_name=f"{nome_canal}_youtube_analytics.xlsx",
-    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
+
