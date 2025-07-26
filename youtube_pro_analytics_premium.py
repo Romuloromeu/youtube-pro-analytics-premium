@@ -40,18 +40,35 @@ def get_device_id():
     return socket.gethostname()
 
 # Função para conectar na planilha Google Sheets
-def conectar_planilha():
-    escopo = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ]
-    import os
+import streamlit as st
+from google.oauth2.service_account import Credentials
+import gspread
 
 def conectar_planilha():
     escopo = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
+
+    secret = st.secrets["google_service_account"]
+
+    info = {
+        "type": secret["type"],
+        "project_id": secret["project_id"],
+        "private_key_id": secret["private_key_id"],
+        "private_key": secret["private_key"].replace("\\n", "\n"),
+        "client_email": secret["client_email"],
+        "client_id": secret["client_id"],
+        "auth_uri": secret["auth_uri"],
+        "token_uri": secret["token_uri"],
+        "auth_provider_x509_cert_url": secret["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": secret["client_x509_cert_url"],
+    }
+
+    credenciais = Credentials.from_service_account_info(info, scopes=escopo)
+    cliente = gspread.authorize(credenciais)
+    planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
+    return planilha
 
     caminho_credenciais = os.path.join(os.path.dirname(__file__), 'secrets', 'credenciais.json')
     credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
