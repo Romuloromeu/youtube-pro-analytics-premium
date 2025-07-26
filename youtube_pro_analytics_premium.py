@@ -89,10 +89,11 @@ def validar_chave(email_input, chave_input, planilha):
 
     for i, row in enumerate(registros):
         if row["Email"] == email_input and row["Chave"] == chave_input:
-            if str(row["Status"]).strip().lower() != "ativo":
+            status = str(row.get("Status", "")).strip().lower()
+            if status != "ativo":
                 return False, "❌ Sua chave está inativa ou bloqueada."
 
-            if str(row["ID do Dispositivo"]).strip() == "":
+            if str(row.get("ID do Dispositivo", "")).strip() == "":
                 planilha.update_cell(i + 2, 6, device_id)  # Coluna F = ID do Dispositivo
                 return True, "✅ Chave validada e dispositivo vinculado com sucesso."
 
@@ -103,6 +104,7 @@ def validar_chave(email_input, chave_input, planilha):
                 return False, "❌ Esta chave já está vinculada a outro dispositivo."
 
     return False, "❌ Chave ou e-mail inválido."
+
 
 
 # Entrada para email e chave
