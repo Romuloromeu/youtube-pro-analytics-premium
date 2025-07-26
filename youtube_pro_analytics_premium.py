@@ -121,7 +121,7 @@ if not chave_valida:
     st.warning("🔐 Acesso restrito. Insira a chave correta para acessar o conteúdo Premium.")
 
 st.markdown("""
-<div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+<div style="margin-top: 20px; display: flex; justify-content: flex-start;">
     <a href="https://youtube-pro-analytics-premium-oxulwvn6ava4pbj94hzuqe.streamlit.app" target="_blank" style="text-decoration: none;">
         <div style="background: linear-gradient(90deg, #00ffe7, #00ccbb); 
                     padding: 12px 20px; 
@@ -140,10 +140,7 @@ st.markdown("""
 
 st.stop()
 
-
-
 st.success(msg_chave)
-
 
 if chave_valida:
     st.success(msg_chave)
