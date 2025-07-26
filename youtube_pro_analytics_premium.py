@@ -121,7 +121,7 @@ if not chave_valida:
     st.warning("🔐 Acesso restrito. Insira a chave correta para acessar o conteúdo Premium.")
 
     if st.button("👀 Usar Versão Pública (Limitada)"):
-        st.switch_page("youtube_pro_analytics_publico.py")  # ajuste se estiver dentro de 'pages/'
+        st.switch_page("pages/youtube_pro_analytics_publico.py")  # ajuste se estiver dentro de 'pages/'
 
     st.stop()
 
