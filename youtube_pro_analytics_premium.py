@@ -120,10 +120,18 @@ if not chave_valida:
 
     st.warning("🔐 Acesso restrito. Insira a chave correta para acessar o conteúdo Premium.")
 
-    if st.button("👀 Usar Versão Pública (Limitada)"):
-        st.switch_page("pages/youtube_pro_analytics_publico.py")  # ajuste se estiver dentro de 'pages/'
+st.markdown("""
+<div style="margin-top: 20px;">
+    <a href="https://youtube-pro-analytics-premium-oxulwvn6ava4pbj94hzuqe.streamlit.app" target="_blank" style="text-decoration: none;">
+        <div style="background: linear-gradient(90deg, #00ffe7, #00ccbb); padding: 12px 20px; border-radius: 8px; color: #001219; font-weight: bold; font-size: 15px; box-shadow: 0 0 10px #00ffe7;">
+            👀 Usar Versão Pública (Limitada)
+        </div>
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
-    st.stop()
+st.stop()
+
 
 st.success(msg_chave)
 
