@@ -68,7 +68,12 @@ def conectar_planilha():
     credenciais = Credentials.from_service_account_info(info, scopes=escopo)
     cliente = gspread.authorize(credenciais)
     planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
+    
+    registros = planilha.get_all_records()
+    st.write(registros)  # Exibe os registros da planilha no app Streamlit
+
     return planilha
+
 
     caminho_credenciais = os.path.join(os.path.dirname(__file__), 'secrets', 'credenciais.json')
     credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
