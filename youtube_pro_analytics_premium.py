@@ -95,32 +95,32 @@ if not chave_valida and not bonus_valido:
     st.markdown("<hr style='margin-top: 15px; margin-bottom: 10px;'>", unsafe_allow_html=True)
     st.markdown("## 🔑 Ainda não tem sua chave de ativação?")
 
-  
-        nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
-        nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
-        mensagem = f"Olá! Me chamo {nome_formatado} e quero adquirir a chave de acesso Premium do YouTube Pro Analytics. Pode me ajudar?"
-        mensagem_url = urllib.parse.quote(mensagem)
-        whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
-        hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
+    nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
+    nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
+    mensagem = f"Olá! Me chamo {nome_formatado} e quero adquirir a chave de acesso Premium do YouTube Pro Analytics. Pode me ajudar?"
+    mensagem_url = urllib.parse.quote(mensagem)
+    whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
+    hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
-        st.markdown(f"""
-        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
-            <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
-                <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px;">
-                    🛒 Adquirir na Hotmart
-                </div>
-            </a>
-            <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
-                <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
-                    Falar com Suporte no WhatsApp
-                </div>
-            </a>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
+        <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px;">
+                🛒 Adquirir na Hotmart
+            </div>
+        </a>
+        <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
+                Falar com Suporte no WhatsApp
+            </div>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
-        st.stop()
+    st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
+    st.stop()
+
 
 if chave_valida:
     st.success(msg_chave)
