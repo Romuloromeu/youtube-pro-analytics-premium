@@ -91,47 +91,42 @@ else:
 
 # ------------------ CONTROLE DE ACESSO ------------------
 
-if not chave_valida and not bonus_valido:
+if not chave_valida:
     st.markdown("<hr style='margin-top: 15px; margin-bottom: 10px;'>", unsafe_allow_html=True)
     st.markdown("## 🔑 Ainda não tem sua chave de ativação?")
 
-    email_gratis = st.text_input("Ou use a versão gratuita (3 relatórios/semana):", placeholder="Seu e-mail")
-    if email_gratis:
-        st.session_state['email_gratis'] = email_gratis
-        st.session_state['uso_gratis'] = st.session_state.get('uso_gratis', 0) + 1
-        if st.session_state['uso_gratis'] > 3:
-            st.error("🚫 Limite semanal atingido. Adquira a versão Premium para acesso completo.")
-            st.stop()
-        else:
-            st.info(f"✅ Relatório {st.session_state['uso_gratis']} de 3 usados nesta semana com o e-mail: {email_gratis}")
-    elif st.session_state.get('ref_user') and bonus_valido:
-        st.info("🎁 Acesso liberado por 3 dias graças ao seu link de convite!")
-    else:
-        nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
-        nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
-        mensagem = f"Olá! Me chamo {nome_formatado} e quero adquirir a chave de acesso Premium do YouTube Pro Analytics. Pode me ajudar?"
-        mensagem_url = urllib.parse.quote(mensagem)
-        whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
-        hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
+    nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
+    nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
+    mensagem = f"Olá! Me chamo {nome_formatado} e quero adquirir a chave de acesso Premium do YouTube Pro Analytics. Pode me ajudar?"
+    mensagem_url = urllib.parse.quote(mensagem)
+    whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
+    hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
-        st.markdown(f"""
-        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
-            <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
-                <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px;">
-                    🛒 Adquirir na Hotmart
-                </div>
-            </a>
-            <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
-                <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
-                    Falar com Suporte no WhatsApp
-                </div>
-            </a>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
+        <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px;">
+                🛒 Adquirir na Hotmart
+            </div>
+        </a>
+        <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
+                Falar com Suporte no WhatsApp
+            </div>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
-        st.stop()
+    st.warning("🔐 Acesso restrito. Insira a chave correta para acessar o conteúdo Premium.")
+
+    if st.button("👀 Usar Versão Pública (Limitada)"):
+        st.switch_page("youtube_pro_analytics_publico.py")  # ajuste se estiver dentro de 'pages/'
+
+    st.stop()
+
+st.success(msg_chave)
+
 
 if chave_valida:
     st.success(msg_chave)
