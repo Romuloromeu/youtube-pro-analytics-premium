@@ -40,13 +40,30 @@ def get_device_id():
     return socket.gethostname()
 
 # Função para conectar na planilha Google Sheets
+import os
+import streamlit as st
+
 def conectar_planilha():
     escopo = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    caminho_credenciais = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
-    credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
+
+    caminho_local = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
+    
+    # Tenta usar credenciais locais
+    if os.path.exists(caminho_local):
+        credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
+    else:
+        # Upload do arquivo via Streamlit
+        st.warning("⚠️ Arquivo de credenciais não encontrado localmente. Envie o arquivo manualmente.")
+        arquivo_upload = st.file_uploader("📄 Envie o arquivo de credenciais (.json)", type=["json"])
+        if not arquivo_upload:
+            st.stop()
+        credenciais = Credentials.from_service_account_info(
+            json.load(arquivo_upload), scopes=escopo
+        )
+
     cliente = gspread.authorize(credenciais)
     planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
     return planilha
