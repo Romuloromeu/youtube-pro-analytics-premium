@@ -40,7 +40,6 @@ def get_device_id():
     return socket.gethostname()
 
 def conectar_planilha(credenciais, nome_arquivo, nome_aba):
-    import gspread
     try:
         cliente = gspread.authorize(credenciais)
         planilha = cliente.open(nome_arquivo).worksheet(nome_aba)
@@ -49,19 +48,17 @@ def conectar_planilha(credenciais, nome_arquivo, nome_aba):
         st.error(f"❌ Erro ao abrir a planilha: {e}")
         st.stop()
 
+def carregar_planilha():
+    escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
+    credenciais = None
 
-escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
-credenciais = None
-
-if os.path.exists(caminho_local):
-    try:
-        credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
-    except Exception as e:
-        st.error(f"❌ Erro ao carregar credenciais locais: {e}")
-        st.stop()
-
+    if os.path.exists(caminho_local):
+        try:
+            credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
+        except Exception as e:
+            st.error(f"❌ Erro ao carregar credenciais locais: {e}")
+            st.stop()
     else:
         st.warning("⚠️ Arquivo de credenciais não encontrado localmente. Envie o arquivo manualmente.")
         arquivo_upload = st.file_uploader("📄 Envie o arquivo de credenciais (.json)", type=["json"])
@@ -80,6 +77,9 @@ if os.path.exists(caminho_local):
     except Exception as e:
         st.error(f"❌ Erro ao conectar com a planilha: {e}")
         st.stop()
+
+# 🔄 Chamada da função (caso você queira usar imediatamente a planilha)
+planilha = carregar_planilha()
 
 def validar_chave(email_input, chave_input, planilha):
     registros = planilha.get_all_records()
