@@ -39,10 +39,16 @@ if st.session_state.get('bonus_ativo'):
 def get_device_id():
     return socket.gethostname()
 
-def conectar_planilha():
-  import os
-from google.oauth2.service_account import Credentials
-import streamlit as st
+def conectar_planilha(credenciais, nome_arquivo, nome_aba):
+    import gspread
+    try:
+        cliente = gspread.authorize(credenciais)
+        planilha = cliente.open(nome_arquivo).worksheet(nome_aba)
+        return planilha
+    except Exception as e:
+        st.error(f"❌ Erro ao abrir a planilha: {e}")
+        st.stop()
+
 
 escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
