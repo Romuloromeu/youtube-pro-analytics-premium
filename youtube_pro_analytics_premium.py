@@ -131,25 +131,25 @@ if not chave_valida and not bonus_valido:
     whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
     hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
-    st.markdown(f"""
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
-        <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
-            <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px;">
-                🛒 Adquirir na Hotmart
-            </div>
-        </a>
-        <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
-            <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
-                <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
-                Falar com Suporte no WhatsApp
-            </div>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
-    st.stop()
-
+   st.markdown(f"""
+<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
+    <a href="https://youtube-pro-analytics.streamlit.app" target="_blank" style="text-decoration: none;">
+        <div style="background-color: #6c757d; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+            🚀 Acessar Versão Grátis
+        </div>
+    </a>
+    <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
+        <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+            🚀 Acessar Premium
+        </div>
+    </a>
+    <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+        <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
+        </div>
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
 if chave_valida:
     st.success(msg_chave)
