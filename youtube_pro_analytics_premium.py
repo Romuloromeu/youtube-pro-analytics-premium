@@ -1,4 +1,3 @@
-
 import os
 import json
 import streamlit as st
@@ -37,18 +36,9 @@ if st.session_state.get('bonus_ativo'):
 def get_device_id():
     return socket.gethostname()
 
-def conectar_planilha(credenciais, nome_arquivo, nome_aba):
-    try:
-        cliente = gspread.authorize(credenciais)
-        planilha = cliente.open(nome_arquivo).worksheet(nome_aba)
-        return planilha
-    except Exception as e:
-        st.error(f"❌ Erro ao abrir a planilha: {e}")
-        st.stop()
-
 def carregar_planilha():
     escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
+    caminho_local = "./auth/credenciais.json"
     credenciais = None
 
     if os.path.exists(caminho_local):
@@ -58,15 +48,8 @@ def carregar_planilha():
             st.error(f"❌ Erro ao carregar credenciais locais: {e}")
             st.stop()
     else:
-        st.warning("⚠️ Arquivo de credenciais não encontrado localmente. Envie o arquivo manualmente.")
-        arquivo_upload = st.file_uploader("📄 Envie o arquivo de credenciais (.json)", type=["json"])
-        if not arquivo_upload:
-            st.stop()
-        try:
-            credenciais = Credentials.from_service_account_info(json.load(arquivo_upload), scopes=escopo)
-        except Exception as e:
-            st.error(f"❌ Erro ao carregar credenciais enviadas: {e}")
-            st.stop()
+        st.error("❌ Arquivo de credenciais não encontrado no servidor.")
+        st.stop()
 
     try:
         cliente = gspread.authorize(credenciais)
@@ -147,8 +130,6 @@ if chave_valida:
     st.success(msg_chave)
 else:
     st.success("✅ Acesso Gratuito liberado")
-
-
 # ----------------------------------------------------
 # Aqui continua todo o seu código original para YouTube Analytics
 # ----------------------------------------------------
