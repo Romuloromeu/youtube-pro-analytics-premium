@@ -45,15 +45,16 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/drive"
     ]
 
-   caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
-    credenciais = None
+  caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
+credenciais = None
 
-    if os.path.exists(caminho_local):
-        try:
-            credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
-        except Exception as e:
-            st.error(f"❌ Erro ao carregar credenciais locais: {e}")
-            st.stop()
+if os.path.exists(caminho_local):
+    try:
+        credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
+    except Exception as e:
+        st.error(f"❌ Erro ao carregar credenciais locais: {e}")
+        st.stop()
+
     else:
         st.warning("⚠️ Arquivo de credenciais não encontrado localmente. Envie o arquivo manualmente.")
         arquivo_upload = st.file_uploader("📄 Envie o arquivo de credenciais (.json)", type=["json"])
