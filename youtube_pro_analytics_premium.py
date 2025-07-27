@@ -40,12 +40,13 @@ def get_device_id():
     return socket.gethostname()
 
 def conectar_planilha():
-    escopo = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ]
+  import os
+from google.oauth2.service_account import Credentials
+import streamlit as st
 
-  caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
+escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+
+caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
 credenciais = None
 
 if os.path.exists(caminho_local):
