@@ -1,3 +1,4 @@
+
 import os
 import json
 import streamlit as st
@@ -17,7 +18,6 @@ import socket
 st.set_page_config(page_title="YouTube Pro Analytics Premium", layout="wide", page_icon="🔓")
 st.title("🔓 YouTube Pro Analytics – Premium")
 
-# ------------------ CONTROLE DE LINK DE INDICAÇÃO ------------------
 param_ref = st.query_params.get("ref", [None])[0]
 if param_ref:
     st.session_state['ref_user'] = param_ref
@@ -33,8 +33,6 @@ if st.session_state.get('bonus_ativo'):
     else:
         st.session_state['bonus_ativo'] = False
         bonus_valido = False
-
-# ------------------ VALIDAÇÃO DE CHAVE VIA PLANILHA ------------------
 
 def get_device_id():
     return socket.gethostname()
@@ -78,7 +76,6 @@ def carregar_planilha():
         st.error(f"❌ Erro ao conectar com a planilha: {e}")
         st.stop()
 
-# 🔄 Chamada da função (caso você queira usar imediatamente a planilha)
 planilha = carregar_planilha()
 
 def validar_chave(email_input, chave_input, planilha):
@@ -105,7 +102,6 @@ msg_chave = ""
 
 if chave_digitada and email_usuario:
     try:
-        planilha = conectar_planilha()
         chave_valida, msg_chave = validar_chave(email_usuario.strip(), chave_digitada.strip(), planilha)
     except Exception as e:
         st.error(f"❌ Erro ao validar chave: {e}")
@@ -149,7 +145,6 @@ if not chave_valida and not bonus_valido:
 
 if chave_valida:
     st.success(msg_chave)
-
 else:
     st.success("✅ Acesso Gratuito liberado")
 
