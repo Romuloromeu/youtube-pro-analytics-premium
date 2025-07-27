@@ -45,7 +45,7 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/drive"
     ]
 
-    caminho_local = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
+   caminho_local = "C:\\Users\\romul\\OneDrive\\Área de Trabalho\\validacao_chave\\credenciais.json"
     credenciais = None
 
     if os.path.exists(caminho_local):
