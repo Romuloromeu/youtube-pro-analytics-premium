@@ -1,5 +1,3 @@
-import os
-import json
 import streamlit as st
 from googleapiclient.discovery import build
 import pandas as pd
@@ -17,6 +15,7 @@ import socket
 st.set_page_config(page_title="YouTube Pro Analytics Premium", layout="wide", page_icon="🔓")
 st.title("🔓 YouTube Pro Analytics – Premium")
 
+# ------------------ CONTROLE DE LINK DE INDICAÇÃO ------------------
 param_ref = st.query_params.get("ref", [None])[0]
 if param_ref:
     st.session_state['ref_user'] = param_ref
@@ -24,6 +23,7 @@ if param_ref:
     if 'bonus_inicio' not in st.session_state:
         st.session_state['bonus_inicio'] = datetime.now()
 
+# Verificar validade dos 3 dias de bônus
 bonus_valido = False
 if st.session_state.get('bonus_ativo'):
     dias_passados = (datetime.now() - st.session_state['bonus_inicio']).days
@@ -33,34 +33,25 @@ if st.session_state.get('bonus_ativo'):
         st.session_state['bonus_ativo'] = False
         bonus_valido = False
 
+# ------------------ VALIDAÇÃO DE CHAVE VIA PLANILHA ------------------
+
+# Função para obter nome do dispositivo (hostname)
 def get_device_id():
     return socket.gethostname()
 
-def carregar_planilha():
-    escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    caminho_local = "./auth/credenciais.json"
-    credenciais = None
+# Função para conectar na planilha Google Sheets
+def conectar_planilha():
+    escopo = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+    caminho_credenciais = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
+    credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
+    cliente = gspread.authorize(credenciais)
+    planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
+    return planilha
 
-    if os.path.exists(caminho_local):
-        try:
-            credenciais = Credentials.from_service_account_file(caminho_local, scopes=escopo)
-        except Exception as e:
-            st.error(f"❌ Erro ao carregar credenciais locais: {e}")
-            st.stop()
-    else:
-        st.error("❌ Arquivo de credenciais não encontrado no servidor.")
-        st.stop()
-
-    try:
-        cliente = gspread.authorize(credenciais)
-        planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
-        return planilha
-    except Exception as e:
-        st.error(f"❌ Erro ao conectar com a planilha: {e}")
-        st.stop()
-
-planilha = carregar_planilha()
-
+# Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
     registros = planilha.get_all_records()
     device_id = get_device_id()
@@ -68,15 +59,19 @@ def validar_chave(email_input, chave_input, planilha):
         if row["Email"] == email_input and row["Chave"] == chave_input:
             if str(row["Status"]).strip().lower() != "ativo":
                 return False, "❌ Sua chave está inativa ou bloqueada."
+
             if str(row["ID do Dispositivo"]).strip() == "":
-                planilha.update_cell(i + 2, 6, device_id)
+                planilha.update_cell(i + 2, 6, device_id)  # Coluna F = ID do Dispositivo
                 return True, "✅ Chave validada e dispositivo vinculado com sucesso."
+
             elif row["ID do Dispositivo"] == device_id:
                 return True, "✅ Acesso autorizado para este dispositivo."
+
             else:
                 return False, "❌ Esta chave já está vinculada a outro dispositivo."
     return False, "❌ Chave ou e-mail inválido."
 
+# Entrada para email e chave
 email_usuario = st.text_input("Digite seu e-mail:")
 chave_digitada = st.text_input("Digite sua chave de ativação:", type="password")
 
@@ -85,6 +80,7 @@ msg_chave = ""
 
 if chave_digitada and email_usuario:
     try:
+        planilha = conectar_planilha()
         chave_valida, msg_chave = validar_chave(email_usuario.strip(), chave_digitada.strip(), planilha)
     except Exception as e:
         st.error(f"❌ Erro ao validar chave: {e}")
@@ -92,44 +88,67 @@ if chave_digitada and email_usuario:
 else:
     chave_valida = False
 
+# ------------------ CONTROLE DE ACESSO ------------------
+
 if not chave_valida and not bonus_valido:
     st.markdown("<hr style='margin-top: 15px; margin-bottom: 10px;'>", unsafe_allow_html=True)
     st.markdown("## 🔑 Ainda não tem sua chave de ativação?")
 
-    nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
-    nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
-    mensagem = f"Olá! Me chamo {nome_formatado} e quero adquirir a chave de acesso Premium do YouTube Pro Analytics. Pode me ajudar?"
-    mensagem_url = urllib.parse.quote(mensagem)
-    whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
-    hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
+    email_gratis = st.text_input("Ou use a versão gratuita (3 relatórios/semana):", placeholder="Seu e-mail")
+    if email_gratis:
+        st.session_state['email_gratis'] = email_gratis
+        st.session_state['uso_gratis'] = st.session_state.get('uso_gratis', 0) + 1
+        if st.session_state['uso_gratis'] > 3:
+            st.error("🚫 Limite semanal atingido. Adquira a versão Premium para acesso completo.")
+            st.stop()
+        else:
+            st.info(f"✅ Relatório {st.session_state['uso_gratis']} de 3 usados nesta semana com o e-mail: {email_gratis}")
+    elif st.session_state.get('ref_user') and bonus_valido:
+        st.info("🎁 Acesso liberado por 3 dias graças ao seu link de convite!")
+    else:
+        nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
+        nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
+        mensagem = f"Olá! Me chamo {nome_formatado} e quero adquirir a chave de acesso Premium do YouTube Pro Analytics. Pode me ajudar?"
+        mensagem_url = urllib.parse.quote(mensagem)
+        whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
+        hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
-    st.markdown(f"""
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
+        st.markdown(f"""
         <a href="https://youtube-pro-analytics.streamlit.app" target="_blank" style="text-decoration: none;">
             <div style="background-color: #6c757d; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
-                🚀 Acessar Versão Grátis
-            </div>
-        </a>
-        <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
-            <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
                 🚀 Acessar Premium
             </div>
         </a>
-        <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+        <a href="https://wa.me/5521992156687?text=Olá! Quero a versão Premium do YouTube Pro Analytics. Pode me ajudar?" target="_blank" style="text-decoration: none;">
             <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
                 <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
             </div>
         </a>
-    </div>
-    """, unsafe_allow_html=True)
+        <a href="https://hotmart.com/seu-produto" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #ff6f00; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+                🛒 Comprar na Hotmart
+            </div>
+        </a>
+            </a>
+            <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+                <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
+                    Falar com Suporte no WhatsApp
+                </div>
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
-    st.stop()
+        st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
+        st.stop()
 
 if chave_valida:
     st.success(msg_chave)
+elif bonus_valido:
+    st.success("🎁 Acesso liberado por convite – expira em até 3 dias")
 else:
     st.success("✅ Acesso Gratuito liberado")
+
 # ----------------------------------------------------
 # Aqui continua todo o seu código original para YouTube Analytics
 # ----------------------------------------------------
@@ -316,4 +335,3 @@ if video_busca:
 
 # DOWNLOAD EXCEL
 st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
