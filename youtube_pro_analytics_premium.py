@@ -25,7 +25,6 @@ if param_ref:
     if 'bonus_inicio' not in st.session_state:
         st.session_state['bonus_inicio'] = datetime.now()
 
-# Verificar validade dos 3 dias de bônus
 bonus_valido = False
 if st.session_state.get('bonus_ativo'):
     dias_passados = (datetime.now() - st.session_state['bonus_inicio']).days
@@ -37,13 +36,8 @@ if st.session_state.get('bonus_ativo'):
 
 # ------------------ VALIDAÇÃO DE CHAVE VIA PLANILHA ------------------
 
-# Função para obter nome do dispositivo (hostname)
 def get_device_id():
     return socket.gethostname()
-
-# Função para conectar na planilha Google Sheets
-import os
-import streamlit as st
 
 def conectar_planilha():
     escopo = [
@@ -79,8 +73,6 @@ def conectar_planilha():
         st.error(f"❌ Erro ao conectar com a planilha: {e}")
         st.stop()
 
-
-# Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
     registros = planilha.get_all_records()
     device_id = get_device_id()
@@ -88,19 +80,15 @@ def validar_chave(email_input, chave_input, planilha):
         if row["Email"] == email_input and row["Chave"] == chave_input:
             if str(row["Status"]).strip().lower() != "ativo":
                 return False, "❌ Sua chave está inativa ou bloqueada."
-
             if str(row["ID do Dispositivo"]).strip() == "":
-                planilha.update_cell(i + 2, 6, device_id)  # Coluna F = ID do Dispositivo
+                planilha.update_cell(i + 2, 6, device_id)
                 return True, "✅ Chave validada e dispositivo vinculado com sucesso."
-
             elif row["ID do Dispositivo"] == device_id:
                 return True, "✅ Acesso autorizado para este dispositivo."
-
             else:
                 return False, "❌ Esta chave já está vinculada a outro dispositivo."
     return False, "❌ Chave ou e-mail inválido."
 
-# Entrada para email e chave
 email_usuario = st.text_input("Digite seu e-mail:")
 chave_digitada = st.text_input("Digite sua chave de ativação:", type="password")
 
@@ -115,10 +103,7 @@ if chave_digitada and email_usuario:
         st.error(f"❌ Erro ao validar chave: {e}")
         st.stop()
 else:
-    # Se não digitou, considera bônus ou gratuito só para avançar na UI (sem liberar premium)
     chave_valida = False
-
-# ------------------ CONTROLE DE ACESSO ------------------
 
 if not chave_valida and not bonus_valido:
     st.markdown("<hr style='margin-top: 15px; margin-bottom: 10px;'>", unsafe_allow_html=True)
@@ -131,32 +116,35 @@ if not chave_valida and not bonus_valido:
     whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
     hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
-   st.markdown(f"""
-<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
-    <a href="https://youtube-pro-analytics.streamlit.app" target="_blank" style="text-decoration: none;">
-        <div style="background-color: #6c757d; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
-            🚀 Acessar Versão Grátis
-        </div>
-    </a>
-    <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
-        <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
-            🚀 Acessar Premium
-        </div>
-    </a>
-    <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
-        <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
-        </div>
-    </a>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 1rem;">
+        <a href="https://youtube-pro-analytics.streamlit.app" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #6c757d; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+                🚀 Acessar Versão Grátis
+            </div>
+        </a>
+        <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #e67e22; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+                🚀 Acessar Premium
+            </div>
+        </a>
+        <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+            <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
+            </div>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
+    st.stop()
 
 if chave_valida:
     st.success(msg_chave)
-elif bonus_valido:
-    st.success("🎁 Acesso liberado por convite – expira em até 3 dias")
+
 else:
     st.success("✅ Acesso Gratuito liberado")
+
 
 # ----------------------------------------------------
 # Aqui continua todo o seu código original para YouTube Analytics
