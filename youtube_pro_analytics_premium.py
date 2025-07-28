@@ -45,8 +45,8 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    caminho_credenciais = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
-    credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
+   caminho_credenciais = "C:/Users/romul/OneDrive/Documentos/validacao_chave/credenciais.json"
+   credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
     cliente = gspread.authorize(credenciais)
     planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
     return planilha
