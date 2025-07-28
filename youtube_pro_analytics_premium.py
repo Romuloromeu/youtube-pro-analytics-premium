@@ -11,6 +11,7 @@ import urllib.parse
 import gspread
 from google.oauth2.service_account import Credentials
 import socket
+import os
 
 st.set_page_config(page_title="YouTube Pro Analytics Premium", layout="wide", page_icon="🔓")
 st.title("🔓 YouTube Pro Analytics – Premium")
@@ -46,6 +47,10 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/drive"
     ]
     caminho_credenciais = "C:/Users/romul/OneDrive/Área de Trabalho/validacao_chave/credenciais.json"
+    
+    if not os.path.exists(caminho_credenciais):
+        raise FileNotFoundError(f"❌ Arquivo de credenciais não encontrado: {caminho_credenciais}")
+    
     credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
     cliente = gspread.authorize(credenciais)
     planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
@@ -55,6 +60,7 @@ def conectar_planilha():
 def validar_chave(email_input, chave_input, planilha):
     registros = planilha.get_all_records()
     device_id = get_device_id()
+    
     for i, row in enumerate(registros):
         if row["Email"] == email_input and row["Chave"] == chave_input:
             if str(row["Status"]).strip().lower() != "ativo":
@@ -69,8 +75,8 @@ def validar_chave(email_input, chave_input, planilha):
 
             else:
                 return False, "❌ Esta chave já está vinculada a outro dispositivo."
+    
     return False, "❌ Chave ou e-mail inválido."
-
 # Entrada para email e chave
 email_usuario = st.text_input("Digite seu e-mail:")
 chave_digitada = st.text_input("Digite sua chave de ativação:", type="password")
