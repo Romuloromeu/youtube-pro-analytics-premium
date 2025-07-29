@@ -119,6 +119,7 @@ if not chave_valida and not bonus_valido:
         whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
         hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
+whatsapp_url = st.session_state.get("whatsapp_url", "https://wa.me/5521992156687")
 st.markdown(f"""
 <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: auto;">
     <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank" style="text-decoration: none;">
