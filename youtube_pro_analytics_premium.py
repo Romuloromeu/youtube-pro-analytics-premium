@@ -120,8 +120,8 @@ if not chave_valida and not bonus_valido:
         hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
       st.markdown(f"""
-<div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: auto;">
-  <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank" style="text-decoration: none;">
+         <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: auto;">
+           <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank" style="text-decoration: none;">
        <div style="background-color: #6c757d; padding: 10px 16px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; text-align: center;">
             🚀 Acessar Gratuito
         </div>
