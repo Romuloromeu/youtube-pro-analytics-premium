@@ -53,8 +53,8 @@ def conectar_planilha():
     
     credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
     cliente = gspread.authorize(credenciais)
-    planilha = cliente.open_by_key("1SzZnjEfyZPQvLlK9soslGsVpo87kl6fe").worksheet("Sheet1")
-    return planilha
+    planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
+return planilha
 
 # Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
