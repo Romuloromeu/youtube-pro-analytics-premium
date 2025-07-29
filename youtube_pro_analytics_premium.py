@@ -46,8 +46,9 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    caminho_credenciais = r"C:\Users\romul\OneDrive\OneDrive\Área de Trabalho\validacao_chave\credenciais.json"
-
+    caminho_credenciais = r"C:\Users\romul\OneDrive\Área de Trabalho\validacao_chave\credenciais.json"
+    if os.path.exists(caminho_credenciais):
+        st.success("✅ Arquivo de credenciais localizado com sucesso.")
     if not os.path.exists(caminho_credenciais):
         raise FileNotFoundError(f"❌ Arquivo de credenciais não encontrado: {caminho_credenciais}")
     
