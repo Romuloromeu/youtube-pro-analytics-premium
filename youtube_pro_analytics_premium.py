@@ -119,41 +119,31 @@ if not chave_valida and not bonus_valido:
         whatsapp_url = f"https://wa.me/5521992156687?text={mensagem_url}"
         hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
 
-        st.markdown(f"""
-        <a href="https://youtube-pro-analytics.streamlit.app" target="_blank" style="text-decoration: none;">
-            <div style="background-color: #6c757d; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
-                🚀 Acessar Premium
-            </div>
-        </a>
-        <a href="https://wa.me/5521992156687?text=Olá! Quero a versão Premium do YouTube Pro Analytics. Pode me ajudar?" target="_blank" style="text-decoration: none;">
-            <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
-                <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
-            </div>
-        </a>
-        <a href="https://hotmart.com/seu-produto" target="_blank" style="text-decoration: none;">
-            <div style="background-color: #ff6f00; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
-                🛒 Comprar na Hotmart
-            </div>
-        </a>
-            </a>
-            <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
-                <div style="background-color: #25D366; padding: 12px 24px; border-radius: 8px; color: white; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="20" height="20">
-                    Falar com Suporte no WhatsApp
-                </div>
-            </a>
+      st.markdown(f"""
+<div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: auto;">
+  <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank" style="text-decoration: none;">
+       <div style="background-color: #6c757d; padding: 10px 16px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; text-align: center;">
+            🚀 Acessar Gratuito
         </div>
-        """, unsafe_allow_html=True)
+    </a>
+    <a href="https://wa.me/5521992156687?text=Olá! Quero a versão Premium do YouTube Pro Analytics. Pode me ajudar?" target="_blank" style="text-decoration: none;">
+        <div style="background-color: #25D366; padding: 10px 16px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="16" height="16"> WhatsApp
+        </div>
+    </a>
+    <a href="https://hotmart.com/seu-produto" target="_blank" style="text-decoration: none;">
+        <div style="background-color: #ff6f00; padding: 10px 16px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; text-align: center;">
+            🛒 Comprar na Hotmart
+        </div>
+    </a>
+    <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+        <div style="background-color: #25D366; padding: 10px 16px; border-radius: 6px; color: white; font-weight: bold; font-size: 14px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="16" height="16"> Falar com Suporte
+        </div>
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
-        st.warning("🔐 Acesso restrito. Insira a chave correta ou use a versão gratuita.")
-        st.stop()
-
-if chave_valida:
-    st.success(msg_chave)
-elif bonus_valido:
-    st.success("🎁 Acesso liberado por convite – expira em até 3 dias")
-else:
-    st.success("✅ Acesso Gratuito liberado")
 
 # ----------------------------------------------------
 # Aqui continua todo o seu código original para YouTube Analytics
