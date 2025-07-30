@@ -90,8 +90,7 @@ c8IAYzLK+WseArNcbWVh740=
 credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=SCOPES)
 gc = gspread.authorize(credenciais)
 sheet = gc.open_by_key("1kg-cRRB-iyagEpJF4CuXLm53ahiJ1g5DowmDFPZkIww").worksheet("Sheet1")
-
-    return planilha
+return planilha
 
 # Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
