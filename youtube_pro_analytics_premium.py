@@ -376,5 +376,10 @@ if video_busca:
         st.warning("🔍 Nenhum vídeo encontrado com esse título.")
 
 # DOWNLOAD EXCEL
-st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats 
+st.download_button(
+    "📅 Baixar Relatório em Excel",
+    data=gerar_excel(df),
+    file_name="relatorio_pro_youtube.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
 
