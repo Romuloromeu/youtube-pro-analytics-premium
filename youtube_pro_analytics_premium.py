@@ -296,23 +296,19 @@ if chave_valida or bonus_valido:
     st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
 
     # Filtro por data personalizada
-st.markdown("### 📆 Filtro por Período")
-data_inicio = st.date_input("De:", df['DataHora'].min().date())
-data_fim = st.date_input("Até:", df['DataHora'].max().date())
+    st.markdown("### 📆 Filtro por Período")
+    data_inicio = st.date_input("De:", df['DataHora'].min().date())
+    data_fim = st.date_input("Até:", df['DataHora'].max().date())
 
-df_filtrado = df[(df['DataHora'].dt.date >= data_inicio) & (df['DataHora'].dt.date <= data_fim)]
+    df_filtrado = df[(df['DataHora'].dt.date >= data_inicio) & (df['DataHora'].dt.date <= data_fim)]
 
-# Mostrar tabela e gráficos (você pode continuar a partir daqui com os gráficos e análises que já tinha)
+    # Mostrar tabela e gráficos (você pode continuar a partir daqui com os gráficos e análises que já tinha)
 
-st.dataframe(df_filtrado)
+    st.dataframe(df_filtrado)
 
-# Botão para exportar Excel
-excel_data = gerar_excel(df_filtrado)
-st.download_button(
-    "📥 Exportar Relatório Excel",
-    data=excel_data,
-    file_name=f"relatorio_{nome_canal}.xlsx",
-    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
+    # Botão para exportar Excel
+    excel_data = gerar_excel(df_filtrado)
+    st.download_button("📥 Exportar Relatório Excel", data=excel_data, file_name=f"relatorio_{nome_canal}.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
 
 
