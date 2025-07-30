@@ -102,14 +102,26 @@ c8IAYzLK+WseArNcbWVh740=
 
 # Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
-   registros = planilha.get_all_records(expected_headers=["Email", "Chave", "Status", "Nome", "WhatsApp", "ID do Dispositivo"])
-   device_id = get_device_id()
-    # restante do seu código aqui...
+    registros = planilha.get_all_records(expected_headers=["Email", "Chave", "Status", "Nome", "WhatsApp", "ID do Dispositivo"])
+    device_id = get_device_id()
     
     for i, row in enumerate(registros):
         if row["Email"] == email_input and row["Chave"] == chave_input:
             if str(row["Status"]).strip().lower() != "ativo":
                 return False, "❌ Sua chave está inativa ou bloqueada."
+
+            if str(row["ID do Dispositivo"]).strip() == "":
+                planilha.update_cell(i + 2, 6, device_id)  # Coluna F = ID do Dispositivo
+                return True, "✅ Chave validada e dispositivo vinculado com sucesso."
+
+            elif row["ID do Dispositivo"] == device_id:
+                return True, "✅ Acesso autorizado para este dispositivo."
+
+            else:
+                return False, "❌ Esta chave já está vinculada a outro dispositivo."
+    
+    return False, "❌ Chave ou e-mail inválido."
+
 
             if str(row["ID do Dispositivo"]).strip() == "":
                 planilha.update_cell(i + 2, 6, device_id)  # Coluna F = ID do Dispositivo
