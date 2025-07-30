@@ -296,7 +296,7 @@ if chave_valida or bonus_valido:
     st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
 
     # Filtro por data personalizada
- st.markdown("### 📆 Filtro por Período")
+st.markdown("### 📆 Filtro por Período")
 data_inicio = st.date_input("De:", df['DataHora'].min().date())
 data_fim = st.date_input("Até:", df['DataHora'].max().date())
 
