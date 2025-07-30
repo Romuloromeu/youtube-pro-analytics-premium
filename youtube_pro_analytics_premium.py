@@ -87,10 +87,11 @@ c8IAYzLK+WseArNcbWVh740=
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chave-validacao-bot%40mindful-acre-465615-m4.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
  }
-credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=SCOPES)
-gc = gspread.authorize(credenciais)
-sheet = gc.open_by_key("1kg-cRRB-iyagEpJF4CuXLm53ahiJ1g5DowmDFPZkIww").worksheet("Sheet1")
-return planilha
+ credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=escopo)
+    gc = gspread.authorize(credenciais)
+    sheet = gc.open_by_key("1kg-cRRB-iyagEpJF4CuXLm53ahiJ1g5DowmDFPZkIww").worksheet("Sheet1")
+    
+    return sheet  # ✅ indentação e nome corretos
 
 # Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
