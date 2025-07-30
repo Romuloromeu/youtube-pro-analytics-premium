@@ -102,8 +102,9 @@ c8IAYzLK+WseArNcbWVh740=
 
 # Função para validar chave e e-mail na planilha
 def validar_chave(email_input, chave_input, planilha):
-   registros = planilha.get_all_records(expected_headers=[])
-     device_id = get_device_id()
+    registros = planilha.get_all_records(expected_headers=[])
+    device_id = get_device_id()
+    # restante do seu código aqui...
     
     for i, row in enumerate(registros):
         if row["Email"] == email_input and row["Chave"] == chave_input:
