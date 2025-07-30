@@ -122,18 +122,6 @@ def validar_chave(email_input, chave_input, planilha):
     
     return False, "❌ Chave ou e-mail inválido."
 
-
-            if str(row["ID do Dispositivo"]).strip() == "":
-                planilha.update_cell(i + 2, 6, device_id)  # Coluna F = ID do Dispositivo
-                return True, "✅ Chave validada e dispositivo vinculado com sucesso."
-
-            elif row["ID do Dispositivo"] == device_id:
-                return True, "✅ Acesso autorizado para este dispositivo."
-
-            else:
-                return False, "❌ Esta chave já está vinculada a outro dispositivo."
-    
-    return False, "❌ Chave ou e-mail inválido."
 # Entrada para email e chave
 email_usuario = st.text_input("Digite seu e-mail:")
 chave_digitada = st.text_input("Digite sua chave de ativação:", type="password")
