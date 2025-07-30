@@ -307,6 +307,11 @@ if chave_valida or bonus_valido:
     st.dataframe(df_filtrado)
 
     # Botão para exportar Excel
-    excel_data = gerar_excel(df_filtrado)
-    st.download_button("📥 Exportar Relatório Excel", data=excel_data, file_name=f"relatorio_{nome_canal}.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    -officedocument.spreadsheetml.sheet")
+  excel_data = gerar_excel(df_filtrado)
+st.download_button(
+    "📥 Exportar Relatório Excel",
+    data=excel_data,
+    file_name=f"relatorio_{nome_canal}.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
