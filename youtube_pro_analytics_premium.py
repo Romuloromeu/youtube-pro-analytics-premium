@@ -46,15 +46,25 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    caminho_credenciais = r"C:\Users\romul\OneDrive\Área de Trabalho\validacao_chave\credenciais.json"
-    if os.path.exists(caminho_credenciais):
-        st.success("✅ Arquivo de credenciais localizado com sucesso.")
-    if not os.path.exists(caminho_credenciais):
-        raise FileNotFoundError(f"❌ Arquivo de credenciais não encontrado: {caminho_credenciais}")
-    
-    credenciais = Credentials.from_service_account_file(caminho_credenciais, scopes=escopo)
-    cliente = gspread.authorize(credenciais)
-    planilha = cliente.open_by_key("13bdoTVkneLEAlcvShsYAP0ajsegN0csVUTf_nK9Plfk").worksheet("Sheet1")
+
+  # Substitua tudo isso:
+# with open("credenciais.json", "r") as f:
+#     credenciais_dict = json.load(f)
+
+# Por isso:
+dados_credenciais = {
+    "type": "service_account",
+    "project_id": "mindful-acre-465615-m4",
+    "private_key_id": "bf3d0d98e9d9ff017b0d59c05c3540d15c195fcf",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...\n-----END PRIVATE KEY-----\n",
+    "client_email": "chave-validacao-bot@mindful-acre-465615-m4.iam.gserviceaccount.com",
+    ...
+}
+
+credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=SCOPES)
+gc = gspread.authorize(credenciais)
+sheet = gc.open_by_key("1kg-cRRB-iyagEpJF4CuXLm53ahiJ1g5DowmDFPZkIww").worksheet("Sheet1")
+
     return planilha
 
 # Função para validar chave e e-mail na planilha
