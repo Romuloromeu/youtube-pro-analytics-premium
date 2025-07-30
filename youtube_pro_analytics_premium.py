@@ -312,3 +312,4 @@ if chave_valida or bonus_valido:
 
 
 
+
