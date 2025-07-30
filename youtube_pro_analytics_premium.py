@@ -47,11 +47,6 @@ def conectar_planilha():
         "https://www.googleapis.com/auth/drive"
     ]
 
-  # Substitua tudo isso:
-# with open("credenciais.json", "r") as f:
-#     credenciais_dict = json.load(f)
-
-# Por isso:
 dados_credenciais = {
     "type": "service_account",
     "project_id": "mindful-acre-465615-m4",
@@ -91,9 +86,7 @@ c8IAYzLK+WseArNcbWVh740=
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chave-validacao-bot%40mindful-acre-465615-m4.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
-}
-
-
+ }
 credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=SCOPES)
 gc = gspread.authorize(credenciais)
 sheet = gc.open_by_key("1kg-cRRB-iyagEpJF4CuXLm53ahiJ1g5DowmDFPZkIww").worksheet("Sheet1")
