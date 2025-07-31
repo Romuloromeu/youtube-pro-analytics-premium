@@ -285,11 +285,9 @@ st.markdown("### 📆 Filtro por Período")
 data_inicio = st.date_input("De:", df['DataHora'].min().date())
 data_fim = st.date_input("Até:", df['DataHora'].max().date())
 
-mes_filtro = data_inicio.month
-ano_filtro = data_inicio.year
-
-df_mes = df_filtrado[df_filtrado['DataHora'].dt.month == mes_filtro]
-df_ano = df_filtrado[df_filtrado['DataHora'].dt.year == ano_filtro]
+df_filtrado = df[(df['DataHora'].dt.date >= data_inicio) & (df['DataHora'].dt.date <= data_fim)]
+df_mes = df_filtrado[df_filtrado['DataHora'].dt.month == datetime.now().month]
+df_ano = df_filtrado[df_filtrado['DataHora'].dt.year == datetime.now().year] 
 
 top5_mes = df_mes.nlargest(5, 'Visualizações')
 top5_ano = df_ano.nlargest(5, 'Visualizações')
