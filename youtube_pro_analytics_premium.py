@@ -281,7 +281,7 @@ nome_canal = buscar_nome_canal(chan_id)
 
 st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
 
-st.markdown("### 🗆 Filtro por Período")
+st.markdown("### 🗓️ Filtro por Período")
 data_inicio = st.date_input("De:", df['DataHora'].min().date())
 data_fim = st.date_input("Até:", df['DataHora'].max().date())
 
@@ -293,7 +293,7 @@ if data_inicio > data_fim:
 # Conversão de DataHora para Data (date puro)
 df['Data'] = df['DataHora'].dt.date
 
-st.markdown("### 📅 Filtro por Período")
+# Filtro de período
 df_filtrado = df[(df['Data'] >= data_inicio) & (df['Data'] <= data_fim)]
 
 # Protege contra DataFrame vazio
@@ -321,7 +321,7 @@ videos_mes = len(df_mes)
 
 col1.metric("🎮 Total de vídeos", total_videos)
 col2.metric("📈 Média de views", media_views)
-col3.metric("🗓 Vídeos neste mês/intervalo", videos_mes)
+col3.metric("🗓️ Vídeos neste mês/intervalo", videos_mes)
 
 if not top5_ano.empty:
     st.subheader("🥧 Top 5 Vídeos do Ano")
@@ -359,5 +359,5 @@ if video_busca:
     else:
         st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
-st.download_button("🗕 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+st.download_button("🗅 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
