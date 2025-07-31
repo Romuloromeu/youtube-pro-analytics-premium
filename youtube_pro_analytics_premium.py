@@ -159,27 +159,54 @@ if not chave_valida and not bonus_valido:
     suporte_url = "https://wa.me/5521992156687?text=Ol%C3%A1%21+Preciso+de+ajuda+com+o+YouTube+Pro+Analytics"
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown(f"""
-        <a href="{hotmart_url}" target="_blank">
-            <div style="background-color: #ff6f00; padding: 12px; border-radius: 8px; color: white; font-weight: bold; text-align: center;">
-                🛒 Comprar na Hotmart
-            </div>
-        </a>""", unsafe_allow_html=True)
-    with col2:
-        st.markdown(f"""
-        <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank">
-            <div style="background-color: #6c757d; padding: 12px; border-radius: 8px; color: white; font-weight: bold; text-align: center;">
-                🚀 Acesso Gratuito
-            </div>
-        </a>""", unsafe_allow_html=True)
-    with col3:
-        st.markdown(f"""
-        <a href="{suporte_url}" target="_blank">
-            <div style="background-color: #25D366; padding: 12px; border-radius: 8px; color: white; font-weight: bold; text-align: center;">
-                💬 Suporte
-            </div>
-        </a>""", unsafe_allow_html=True)
-    st.stop()
+       st.markdown(f"""
+    <a href="{hotmart_url}" target="_blank">
+        <div style="
+            background-color: #ff6f00; 
+            padding: 12px; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold; 
+            text-align: center; 
+            max-width: 180px; 
+            margin: 0 auto;
+            ">
+            🛒 Comprar na Hotmart
+        </div>
+    </a>""", unsafe_allow_html=True)
+with col2:
+    st.markdown(f"""
+    <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank">
+        <div style="
+            background-color: #6c757d; 
+            padding: 12px; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold; 
+            text-align: center; 
+            max-width: 180px; 
+            margin: 0 auto;
+            ">
+            🚀 Acesso Gratuito
+        </div>
+    </a>""", unsafe_allow_html=True)
+with col3:
+    st.markdown(f"""
+    <a href="{suporte_url}" target="_blank">
+        <div style="
+            background-color: #25D366; 
+            padding: 12px; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold; 
+            text-align: center; 
+            max-width: 180px; 
+            margin: 0 auto;
+            ">
+            💬 Suporte
+        </div>
+    </a>""", unsafe_allow_html=True)
+st.stop()
 
 st.markdown("""
 <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 10px; border: 2px solid #007BFF;">
