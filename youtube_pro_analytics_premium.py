@@ -13,7 +13,46 @@ from google.oauth2.service_account import Credentials
 import socket
 
 st.set_page_config(page_title="YouTube Pro Analytics Premium", layout="wide", page_icon="🔓")
-st.title("🔓 YouTube Pro Analytics – Premium")
+st.markdown("""
+    <style>
+    .main-title {
+        font-size: 36px;
+        font-weight: 800;
+        color: #333;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    .custom-button {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .custom-button:hover {
+        background-color: #e0e0e0;
+    }
+    .highlight-box {
+        border: 2px solid #0066cc;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #f9f9ff;
+        margin-top: 30px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="main-title">🔓 YouTube Pro Analytics – Premium</div>', unsafe_allow_html=True)
 
 param_ref = st.query_params.get("ref", [None])[0]
 if param_ref:
@@ -35,12 +74,26 @@ def get_device_id():
     return socket.gethostname()
 
 def conectar_planilha():
-    dados_credenciais = {...}  # CREDENCIAIS OMITIDAS
+    dados_credenciais = {
+        "type": "service_account",
+        "project_id": "SEU_PROJECT_ID",
+        "private_key_id": "SUA_PRIVATE_KEY_ID",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nSUA_CHAVE\n-----END PRIVATE KEY-----\n",
+        "client_email": "SEU_EMAIL@projeto.iam.gserviceaccount.com",
+        "client_id": "SEU_CLIENT_ID",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/SEU_EMAIL@projeto.iam.gserviceaccount.com"
+    }
     escopo = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
     credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=escopo)
     gc = gspread.authorize(credenciais)
     planilha = gc.open_by_key("1kg-cRRB-iyagEpJF4CuXLm53ahiJ1g5DowmDFPZkIww").worksheet("Sheet1")
     return planilha
+
+# Continuação da lógica do app com os elementos visuais integrados
+
 
 def validar_chave(email_input, chave_input, planilha):
     registros = planilha.get_all_records(expected_headers=["Email", "Chave", "Status", "Nome ", "WhatsApp", "ID do Dispositivo"])
