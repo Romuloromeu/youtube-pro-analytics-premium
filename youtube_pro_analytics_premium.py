@@ -281,13 +281,33 @@ nome_canal = buscar_nome_canal(chan_id)
 
 st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
 
+df = coletar_videos(chan_id)
+nome_canal = buscar_nome_canal(chan_id)
+
+st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
+
 st.markdown("### 📆 Filtro por Período")
 data_inicio = st.date_input("De:", df['DataHora'].min().date())
 data_fim = st.date_input("Até:", df['DataHora'].max().date())
 
+# Garante que as datas estejam no intervalo correto
+if data_inicio > data_fim:
+    st.warning("⚠️ A data inicial não pode ser maior que a final.")
+    st.stop()
+
+# Filtro de período
 df_filtrado = df[(df['DataHora'].dt.date >= data_inicio) & (df['DataHora'].dt.date <= data_fim)]
-df_mes = df_filtrado[df_filtrado['DataHora'].dt.month == datetime.now().month]
-df_ano = df_filtrado[df_filtrado['DataHora'].dt.year == datetime.now().year] 
+
+# Protege contra DataFrame vazio
+if df_filtrado.empty:
+    st.warning("⚠️ Nenhum vídeo encontrado no período selecionado.")
+    st.stop()
+
+# Top 5 do mês com base no mês e ano inicial do filtro
+mes_filtro = data_inicio.month
+ano_filtro = data_inicio.year
+df_mes = df_filtrado[(df_filtrado['DataHora'].dt.month == mes_filtro) & (df_filtrado['DataHora'].dt.year == ano_filtro)]
+df_ano = df_filtrado[df_filtrado['DataHora'].dt.year == ano_filtro]
 
 top5_mes = df_mes.nlargest(5, 'Visualizações')
 top5_ano = df_ano.nlargest(5, 'Visualizações')
@@ -303,17 +323,22 @@ videos_mes = len(df_mes)
 
 col1.metric("🎮 Total de vídeos", total_videos)
 col2.metric("📈 Média de views", media_views)
-col3.metric("🗓 Vídeos este mês", videos_mes)
+col3.metric("🗓 Vídeos neste mês/intervalo", videos_mes)
 
+if not top5_ano.empty:
+    st.subheader("🥧 Top 5 Vídeos do Ano")
+    fig1 = go.Figure(data=[go.Pie(labels=top5_ano['Título'], values=top5_ano['Visualizações'], hole=0.3)])
+    st.plotly_chart(fig1, use_container_width=True)
+else:
+    st.info("ℹ️ Nenhum vídeo do ano encontrado no intervalo selecionado.")
 
-st.subheader("🥧 Top 5 Vídeos do Ano")
-fig1 = go.Figure(data=[go.Pie(labels=top5_ano['Título'], values=top5_ano['Visualizações'], hole=0.3)])
-st.plotly_chart(fig1, use_container_width=True)
-
-st.subheader("📊 Top 5 Vídeos do Mês")
-fig_bar = px.bar(top5_mes, x='Visualizações', y='Título', orientation='h', color='Visualizações')
-fig_bar.update_layout(yaxis=dict(autorange="reversed"))
-st.plotly_chart(fig_bar, use_container_width=True)
+if not top5_mes.empty:
+    st.subheader("📊 Top 5 Vídeos do Mês")
+    fig_bar = px.bar(top5_mes, x='Visualizações', y='Título', orientation='h', color='Visualizações')
+    fig_bar.update_layout(yaxis=dict(autorange="reversed"))
+    st.plotly_chart(fig_bar, use_container_width=True)
+else:
+    st.info("ℹ️ Nenhum vídeo do mês encontrado no intervalo selecionado.")
 
 st.subheader("🌟 20 Vídeos Mais Recentes")
 st.dataframe(df20[['Título','Data','Hora','Dia da Semana','Visualizações','Likes','Dislikes']])
@@ -321,7 +346,7 @@ st.dataframe(df20[['Título','Data','Hora','Dia da Semana','Visualizações','Li
 st.markdown("## 🔍 Buscar Vídeo Específico")
 video_busca = st.text_input("Digite parte do título do vídeo que deseja buscar:")
 if video_busca:
-    resultados = df[df['Título'].str.contains(video_busca, case=False, na=False)]
+    resultados = df_filtrado[df_filtrado['Título'].str.contains(video_busca, case=False, na=False)]
     if not resultados.empty:
         st.success(f"{len(resultados)} vídeo(s) encontrado(s):")
         for idx, row in resultados.iterrows():
@@ -334,8 +359,8 @@ if video_busca:
                 st.write(f"**Dislikes:** {row['Dislikes']:,}")
                 st.markdown(f"[🔗 Assistir no YouTube](https://www.youtube.com/watch?v={row['video_id']})")
     else:
-        st.warning("🔍 Nenhum vídeo encontrado com esse título.")
+        st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
-st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
