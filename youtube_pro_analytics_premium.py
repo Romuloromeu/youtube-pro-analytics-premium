@@ -281,7 +281,7 @@ nome_canal = buscar_nome_canal(chan_id)
 
 st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
 
-st.markdown("### 📆 Filtro por Período")
+st.markdown("### 🗆 Filtro por Período")
 data_inicio = st.date_input("De:", df['DataHora'].min().date())
 data_fim = st.date_input("Até:", df['DataHora'].max().date())
 
@@ -290,8 +290,11 @@ if data_inicio > data_fim:
     st.warning("⚠️ A data inicial não pode ser maior que a final.")
     st.stop()
 
+# Conversão de DataHora para Data (date puro)
+df['Data'] = df['DataHora'].dt.date
+
 # Filtro de período
-df_filtrado = df[(df['DataHora'].dt.date >= data_inicio) & (df['DataHora'].dt.date <= data_fim)]
+df_filtrado = df[(df['Data'] >= data_inicio) & (df['Data'] <= data_fim)]
 
 # Protege contra DataFrame vazio
 if df_filtrado.empty:
@@ -328,7 +331,7 @@ else:
     st.info("ℹ️ Nenhum vídeo do ano encontrado no intervalo selecionado.")
 
 if not top5_mes.empty:
-    st.subheader("📊 Top 5 Vídeos do Mês")
+    st.subheader("📈 Top 5 Vídeos do Mês")
     fig_bar = px.bar(top5_mes, x='Visualizações', y='Título', orientation='h', color='Visualizações')
     fig_bar.update_layout(yaxis=dict(autorange="reversed"))
     st.plotly_chart(fig_bar, use_container_width=True)
@@ -356,5 +359,6 @@ if video_busca:
     else:
         st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
-st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+st.download_button("🗕 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+rado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
