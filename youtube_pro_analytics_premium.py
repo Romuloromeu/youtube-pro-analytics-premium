@@ -293,7 +293,7 @@ if data_inicio > data_fim:
 # Conversão de DataHora para Data (date puro)
 df['Data'] = df['DataHora'].dt.date
 
-# Filtro de período
+st.markdown("### 📅 Filtro por Período")
 df_filtrado = df[(df['Data'] >= data_inicio) & (df['Data'] <= data_fim)]
 
 # Protege contra DataFrame vazio
