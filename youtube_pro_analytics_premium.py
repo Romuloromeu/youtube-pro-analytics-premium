@@ -76,15 +76,43 @@ def get_device_id():
 def conectar_planilha():
     dados_credenciais = {
         "type": "service_account",
-        "project_id": "SEU_PROJECT_ID",
-        "private_key_id": "SUA_PRIVATE_KEY_ID",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nSUA_CHAVE\n-----END PRIVATE KEY-----\n",
-        "client_email": "SEU_EMAIL@projeto.iam.gserviceaccount.com",
-        "client_id": "SEU_CLIENT_ID",
+        "project_id": "mindful-acre-465615-m4",
+        "private_key_id": "bf3d0d98e9d9ff017b0d59c05c3540d15c195fcf",
+        "private_key": """-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvbJskJ9B+VrOI
+ZXElGVU/fVX8wIDUDCuOqHeh6drvZiMfnTvNZb3UsQ1ySAgeD5/F77DDf9BX9hc0
+OHsXADXo8qR3+8ca3s0rxXbH/kPcgMDX3mcXXCkShDafslj+3XccFvHvzhfQ+vIT
+xTFlA0QuGrNQ8OM6aR6KCgk9JPh7sOvQYbUq09dX6IsITJULyp/XS72P9qc8qwpj
+KIcjX9lOcSdoVAbSzNOKOO+6ILjwMQaG0R/fpvy00LNIeHm0FB13BGEzgy3VFkEA
+iX1Oie8DRPc5qNpV+I5Cn/Z/4/J16IM3hK3SZoijGiOJNy0E1FVUDEAQGu+EhoKV
+yNL7hpL3AgMBAAECggEAA+nSVC4nMopQmvxYV9GG21G6d1b8CL70wcv0T0JeRfTr
+V6s0SFK6t2HzwNbmh3UlxU6hjNrvFOdCgUG5TTwN99Jh5ONS/8B0p0NScQe1D9g3
+dRlbB2Rg7i7Q4SMjZRwfqhrA7u6UDW9rsxE1FuHJxZWG5olZKFZr/fxXVGvctzWj
+uJJ837mAy/jSJJPXIn9+ID/YEofb1h13/EQAcL0rM7BbiTuBUOAA/48SzskzqT8V
+dX2eejjETq9hESe/2fxD4OzuakzLOofxewmgdLUuffBLUJ2wcVxo7+qDeEIyjYrk
+fsaejHaicDl9iAvi6zsQp/T5Myd65RK96/k/CSqPsQKBgQDU2XgXqZOFJ87wQiSR
+6iskbf4r/57yUErKo8NmvYRTR+2905wvWOmABpF4k0yeMOTx68ygqfK2CZiJcHPo
++4YSMmKYjy+8mseFilZ6vTeF74qfQct/QxIQjgRnc8+VTTkl608QHlFCfejjWrbW
+z+J19hr/2W2KXa8GouLxzvFe2wKBgQDS/NRZhyODTvwq0FCvuSbm+DElSOmtktha
+Dz56+Kl0XXD8vSjcqaKPedX6gNRgXA8FcjR7CQKhHiQ+wzZ35xyZ8X3T+6pgL5if
+n64FT4v795LmsUwvdujj6IjBV26TItQhHtZ6fktl3RAGIPH8Air5zbkD9Lg+Lpwg
+EdyY9avRFQKBgBR9fu8gNwBZjbVZWLXnShHuuMo5iG6hRiHt0/C/C88MnJlqlp2E
+PK5Dc5uc6oJMCK41WfSZh7D4iYOpnK7wD78OtKklF55bdBup7ptQPdkZ70lXhySQ
+K1wGn+vpnTEtRvQci/bsRDxXbKT+ZZ2WU6GxeHXq032/eQr1gU1v85KDAoGAWA2K
+Nd7vVEKnfNq5gcy8zpHwOMZIN9dcEaHhCoMyfUzt9ZygLA9jt4s6YTRY7eodnsE9
+48cr4L/qkoL3/WxnhFvDjq+uODxE7wE+KBs9qad2GG8QA5MVuN/4CvCJRkC31SbA
+jhidMOLkaBphwzHIa76Oo3cDWXgsUjoCHZgR380CgYEAuN3VxBHHhUnEht22UNeH
+a7f6FXBDkf7XvJF4dQI34MEYMxt5F4vlMFZWUf8wZIyciGxj+Yl+kGj6kp8MlHD2
+DsJJQMLr0OifCEOvDLkJSyDeR4Rf351WyDoWaBNBBwTKJb7vcVBopHcLgZSLzeDT
+c8IAYzLK+WseArNcbWVh740=
+-----END PRIVATE KEY-----""",
+        "client_email": "chave-validacao-bot@mindful-acre-465615-m4.iam.gserviceaccount.com",
+        "client_id": "108446453747344915328",
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/SEU_EMAIL@projeto.iam.gserviceaccount.com"
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/chave-validacao-bot%40mindful-acre-465615-m4.iam.gserviceaccount.com",
+        "universe_domain": "googleapis.com"
     }
     escopo = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
     credenciais = Credentials.from_service_account_info(dados_credenciais, scopes=escopo)
