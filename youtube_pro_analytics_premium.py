@@ -360,5 +360,4 @@ if video_busca:
         st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
 st.download_button("🗕 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-rado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
