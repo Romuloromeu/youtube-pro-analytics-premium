@@ -294,9 +294,16 @@ df20 = df_filtrado.nlargest(20, 'DataHora')
 
 st.markdown("## 📊 Visão Geral")
 col1, col2, col3 = st.columns(3)
-col1.metric("🎮 Total de vídeos", len(df_filtrado))
-col2.metric("📈 Média de views", int(df_filtrado['Visualizações'].mean()))
-col3.metric("🗓 Vídeos este mês", len(df_mes))
+
+total_videos = len(df_filtrado)
+media_views = df_filtrado['Visualizações'].mean()
+media_views = int(media_views) if pd.notnull(media_views) else 0
+videos_mes = len(df_mes)
+
+col1.metric("🎮 Total de vídeos", total_videos)
+col2.metric("📈 Média de views", media_views)
+col3.metric("🗓 Vídeos este mês", videos_mes)
+
 
 st.subheader("🥧 Top 5 Vídeos do Ano")
 fig1 = go.Figure(data=[go.Pie(labels=top5_ano['Título'], values=top5_ano['Visualizações'], hole=0.3)])
