@@ -193,7 +193,7 @@ if not entrada:
     st.stop()
 
 def conectar_youtube():
-    return build('youtube', 'v3', developerKey='SUA_API_KEY')
+    return build('youtube', 'v3', developerKey='AIzaSyANI2GxhU0bMyHhns1BbEmiVMVWGLKZgZA')
 
 def extrair_channel_id(texto):
     match = re.search(r'(?:channel/|c/|user/)?([A-Za-z0-9_-]{24,})', texto)
