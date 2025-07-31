@@ -156,60 +156,40 @@ if not chave_valida and not bonus_valido:
     nome_pre = st.text_input("Digite seu nome para agilizar o atendimento (opcional):", value="")
     nome_formatado = nome_pre.strip() if nome_pre.strip() else "Cliente"
     hotmart_url = f"https://hotmart.com/seu-produto?cliente={urllib.parse.quote(nome_formatado)}"
-    suporte_url = "https://wa.me/5521992156687?text=Ol%C3%A1%21+Preciso+de+ajuda+com+o+YouTube+Pro+Analytics"
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown(f"""
-        <a href="{hotmart_url}" target="_blank">
-            <div style="
-                background-color: #ff6f00; 
-                padding: 12px; 
-                border-radius: 8px; 
-                color: white; 
-                font-weight: bold; 
-                text-align: center; 
-                max-width: 180px; 
-                margin: 0 auto;
-                ">
-                🛒 Comprar na Hotmart
-            </div>
-        </a>""", unsafe_allow_html=True)
+    suporte_url = "https://wa.me/5521992156687?text=Olá! Quero a versão Premium do YouTube Pro Analytics. Pode me ajudar?"
 
-    with col2:
-        st.markdown(f"""
-        <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank">
-            <div style="
-                background-color: #6c757d; 
-                padding: 12px; 
-                border-radius: 8px; 
-                color: white; 
-                font-weight: bold; 
-                text-align: center; 
-                max-width: 180px; 
-                margin: 0 auto;
-                ">
-                🚀 Acesso Gratuito
-            </div>
-        </a>""", unsafe_allow_html=True)
-
-    with col3:
-        st.markdown(f"""
-        <a href="{suporte_url}" target="_blank">
-            <div style="
-                background-color: #25D366; 
-                padding: 12px; 
-                border-radius: 8px; 
-                color: white; 
-                font-weight: bold; 
-                text-align: center; 
-                max-width: 180px; 
-                margin: 0 auto;
-                ">
-                💬 Suporte
-            </div>
-        </a>""", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="margin-top: 15px; padding: 25px; border-radius: 12px; background: #f5f5f5; border-left: 6px solid #00ffe7; box-shadow: 0 0 12px rgba(0,0,0,0.05);">
+        <h3 style="color:#000; margin-top:0;">🚀 Versão Premium disponível</h3>
+        <div style="font-size: 17px; color: #333; margin-bottom: 14px;">
+            Desbloqueie recursos avançados com o <strong>YouTube Pro Analytics Premium</strong>:
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 16px; color:#111;">
+            <div>📈 Até 50 vídeos por canal</div>
+            <div>📊 Gráficos interativos + Excel</div>
+            <div>🗓️ Filtro por período e palavras-chave</div>
+            <div>💡 Métricas com insights e estimativas</div>
+            <div>🔒 Suporte dedicado + acesso exclusivo</div>
+        </div>
+        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 16px;">
+            <a href="https://youtube-pro-analytics-premium-nvw3q4bkbnajgxtcxclhiy.streamlit.app/" target="_blank" style="text-decoration: none;">
+                <div style="background: linear-gradient(90deg, #00ffe7, #00ccbb); padding: 12px 20px; border-radius: 8px; color: #001219; font-weight: bold; font-size: 15px; box-shadow: 0 0 10px #00ffe7;">
+                    🚀 Acesso Gratuito
+                </div>
+            </a>
+            <a href="{suporte_url}" target="_blank" style="text-decoration: none;">
+                <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
+                </div>
+            </a>
+            <a href="{hotmart_url}" target="_blank" style="text-decoration: none;">
+                <div style="background-color: #ff6f00; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+                    🛒 Comprar na Hotmart
+                </div>
+            </a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.stop()
 st.markdown("""
