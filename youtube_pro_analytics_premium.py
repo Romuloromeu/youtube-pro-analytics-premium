@@ -177,7 +177,7 @@ if not chave_valida and not bonus_valido:
                     🚀 Acesso Gratuito
                 </div>
             </a>
-            <a href="{suporte_url}" target="_blank" style="text-decoration: none;">
+            <a href="https://pay.hotmart.com/N101027538K" target="_blank" style="text-decoration: none;">
                 <div style="background-color: #25D366; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 10px;">
                     <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
                 </div>
