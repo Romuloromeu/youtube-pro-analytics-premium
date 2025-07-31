@@ -281,11 +281,6 @@ nome_canal = buscar_nome_canal(chan_id)
 
 st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
 
-df = coletar_videos(chan_id)
-nome_canal = buscar_nome_canal(chan_id)
-
-st.success(f"✅ {len(df)} vídeos carregados do canal **{nome_canal}**")
-
 st.markdown("### 📆 Filtro por Período")
 data_inicio = st.date_input("De:", df['DataHora'].min().date())
 data_fim = st.date_input("Até:", df['DataHora'].max().date())
@@ -362,5 +357,4 @@ if video_busca:
         st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
 st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
 
