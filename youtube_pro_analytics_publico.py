@@ -131,10 +131,11 @@ st.markdown("""
                     <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" width="18" height="18"> WhatsApp
                 </div>
             </a>
-            <a href="https://hotmart.com/seu-produto" target="_blank" style="text-decoration: none;">
-                <div style="background-color: #ff6f00; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
-                    🛒 Comprar na Hotmart
-                </div>
+            <!-- Botão da Hotmart -->
+            <a href="https://pay.hotmart.com/N101027538K" target="_blank" style="text-decoration: none;">
+               <div style="background-color: #ff6f00; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
+                 🛒 Comprar na Hotmart
+               </div>
             </a>
         </div>
     </div>
