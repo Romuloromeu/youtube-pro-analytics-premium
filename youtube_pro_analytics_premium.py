@@ -331,8 +331,18 @@ else:
     st.info("ℹ️ Nenhum vídeo do ano encontrado no intervalo selecionado.")
 
 if not top5_mes.empty:
-    st.subheader("📈 Top 5 Vídeos do Mês")
-    fig_bar = px.bar(top5_mes, x='Visualizações', y='Título', orientation='h', color='Visualizações', height=400)
+    # GRÁFICO BARRAS MELHORADO
+    st.subheader("📊 Top 5 Vídeos do Mês")
+    fig_bar = px.bar(
+        top5_mes,
+        x='Visualizações',
+        y='Título',
+        orientation='h',
+        color='Visualizações',
+        color_continuous_scale='Teal',
+        title='Top 5 Vídeos do Mês',
+        labels={'Título': 'Título do Vídeo', 'Visualizações': 'Views'}
+    )
     fig_bar.update_layout(yaxis=dict(autorange="reversed"))
     st.plotly_chart(fig_bar, use_container_width=True)
 else:
@@ -359,6 +369,6 @@ if video_busca:
     else:
         st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
-st.download_button("🗅 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+st.download_button("📥 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
