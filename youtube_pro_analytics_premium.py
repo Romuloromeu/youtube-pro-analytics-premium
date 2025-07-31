@@ -332,7 +332,7 @@ else:
 
 if not top5_mes.empty:
     # GRÁFICO BARRAS MELHORADO
-    st.subheader("📊 Top 5 Vídeos do Mês")
+    st.subheader("📈 Top 5 Vídeos do Mês")
     fig_bar = px.bar(
         top5_mes,
         x='Visualizações',
@@ -343,7 +343,10 @@ if not top5_mes.empty:
         title='Top 5 Vídeos do Mês',
         labels={'Título': 'Título do Vídeo', 'Visualizações': 'Views'}
     )
-    fig_bar.update_layout(yaxis=dict(autorange="reversed"))
+    fig_bar.update_layout(
+        yaxis=dict(autorange="reversed"),
+        height=400  # Define uma altura proporcional ao conteúdo
+    )
     st.plotly_chart(fig_bar, use_container_width=True)
 else:
     st.info("ℹ️ Nenhum vídeo do mês encontrado no intervalo selecionado.")
@@ -369,6 +372,6 @@ if video_busca:
     else:
         st.warning("🔍 Nenhum vídeo encontrado com esse título no período filtrado.")
 
-st.download_button("📥 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+st.download_button("📅 Baixar Relatório em Excel", data=gerar_excel(df_filtrado), file_name="relatorio_pro_youtube.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
