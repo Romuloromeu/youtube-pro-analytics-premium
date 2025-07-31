@@ -191,7 +191,7 @@ if not chave_valida and not bonus_valido:
     </div>
     """, unsafe_allow_html=True)
 
-st.stop()
+    st.stop()
 st.markdown("""
 <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 10px; border: 2px solid #007BFF;">
     <h3 style="color: #007BFF;">🔍 Pesquise o canal do YouTube para análise:</h3>
