@@ -183,7 +183,7 @@ if not chave_valida and not bonus_valido:
                   WhatsApp
               </div>
             </a>
-            <a href="https://pay.hotmart.com/N101027538K" target="_blank" style="text-decoration: none;">
+            <a href="https://readynerd3.hotmart.host/youtube-pro-analytics-acesso-premium-6c31a725-a7c4-4739-bc18-bfef106d9799" target="_blank" style="text-decoration: none;">
                <div style="background-color: #ff6f00; padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold; font-size: 15px;">
                  🛒 Comprar na Hotmart
               </div>
